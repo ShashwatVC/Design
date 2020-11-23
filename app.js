@@ -40,14 +40,7 @@ app.use('/',shopRoutes);
 //404 route declaration
 app.use(econtroller.pgnotfnd);
 
-app.use((req,res,next) => {
-    User.findByPk(1)    
-        .then(user => {
-            req.user = user;
-            next();
-        })
-        .catch(err => console.log(err));
-});
+
     // const ts = req.user.id;
     // console.log(ts);
 
@@ -73,4 +66,13 @@ sqlz
     })
     .catch(err=>{
         console.log(err);
+    });
+
+    app.use((req,res,next) => {
+        User.findByPk(1)    
+            .then(user => {
+                req.user = user;
+                next();
+            })
+            .catch(err => console.log(err));
     });
