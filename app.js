@@ -31,18 +31,9 @@ app.use(bodyParser.urlencoded({extended:false}));
 // serving static files
 app.use(express.static(path.join(__dirname,'public')));
 
-//filtering "/admin" routes to adminData.routes
-app.use('/admin',adminRoutes);
-
-// setting up middleware to use shopRoutes declared above:
-app.use('/',shopRoutes);
-
-//404 route declaration
-app.use(econtroller.pgnotfnd);
 
 
-    // const ts = req.user.id;
-    // console.log(ts);
+   
 
 Product.belongsTo(User,{constraints:true, onDelete:'CASCADE'});
 User.hasMany(Product);
@@ -69,10 +60,26 @@ sqlz
     });
 
     app.use((req,res,next) => {
+        console.log("Hii ✌");
+
         User.findByPk(1)    
             .then(user => {
                 req.user = user;
+                //console.log("USER: ",req.user)
                 next();
             })
             .catch(err => console.log(err));
     });
+
+
+
+
+
+//filtering "/admin" routes to adminData.routes
+app.use('/admin',adminRoutes);
+
+// setting up middleware to use shopRoutes declared above:
+app.use('/',shopRoutes);
+
+//404 route declaration
+app.use(econtroller.pgnotfnd);
