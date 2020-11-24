@@ -40,9 +40,11 @@ exports.getEditProduct = (req,res,next)=>{// app.post to filter requests to post
         return res.redirect('/');
     }
     const prodId = req.params.id;
-    P.findByPk(prodId)
-    .then(product => {
-        
+    req.user
+    .getProducts({where:{id:prodId}})
+    //P.findByPk(prodId)
+    .then(products => {
+        const product = products[0];
         if(!product){
             return res.redirect('/');
         }
@@ -99,7 +101,9 @@ exports.postEditProduct = (req,res,next) =>{
 exports.getProducts = (req,res,next)=>{
     //const products = adminData.products; was used when controller wasn't set up...
 
-        P.findAll()
+        //P.findAll()
+        req.user
+        .getProducts()
         .then(products=>{
             res.render('admin/products',{
                 prods:products, 

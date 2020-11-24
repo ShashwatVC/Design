@@ -3,13 +3,15 @@ const Sqlz= require('sequelize');
 
 const sqlz = require('../util/db');
 
-const Cart = sqlz.define('cart',{
+const CartItem = sqlz.define('cartItem',{
     id:{
         type : Sqlz.INTEGER,
         autoIncrement : true,
         allowNull : false,
         primaryKey: true
-    }
+    },
+    quantity: Sqlz.INTEGER,
+    
 })
 
-module.exports = Cart;
+module.exports = CartItem;
