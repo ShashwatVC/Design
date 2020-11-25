@@ -2,11 +2,11 @@
   "name": "design",
   "version": "1.0.0",
   "description": "",
-  "main": "bingo.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node hort.js",
-    "start-server": "node hort.js"
+    "start": "node app.js",
+    "start-server": "node app.js"
   },
   "author": "",
   "license": "ISC",
