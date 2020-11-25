@@ -1,5 +1,6 @@
 const P = require('../models/product')
-const C = require('../models/cart')
+const C = require('../models/cart');
+const CartItem = require('../models/cart-item');
 
 exports.getIndex = (req,res,next)=>{
     P.findAll()
@@ -63,7 +64,13 @@ exports.getCart = (req, res, next) => {
     .getCart()
         .then(cart => {
             return cart.getProducts()
-            .then()
+            .then(products =>{
+                res.render('shop/cart',{
+                    pageTitle:'Cart',
+                    path:'/cart',
+                    products: products[0]
+                });
+            })
             .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
@@ -90,10 +97,31 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req,res,next) =>{
     const prodID = req.body.pid;
-    P.findByPk(prodID,(prod) =>{
-    C.addProduct(prodID,prod.price);
-    //console.log(prod.title);
-    });
+    let fetchedCart;
+    req.user.getCart()
+        .then(cart => {
+            fetchedCart = cart;
+            return cart.getProducts({where:{id:prodID}});
+        })
+        .then(products =>{
+            let product;
+            if(products.length>0){
+                 product = products[0];
+            }
+            let newQuantity = 1;
+            if(product){
+                //...
+            }
+            return P.findByPk(prodID)
+                .then(product =>{
+                    return fetchedCart.addProduct(product,{ 
+                        through: {quantity:newQuantity} 
+                    });
+                })
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+    
     
      res.redirect('/cart');
 }
