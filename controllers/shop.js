@@ -135,10 +135,21 @@ exports.postCart = (req,res,next) =>{
 
 exports.postCartDeleteProduct = (req,res,next) =>{
     const prodID = req.body.pid;
-    P.findByPk(prodID, product =>{
-        C.deleteProduct(prodID, product.price);
-        res.redirect('/cart');
-    });
+    req.user
+        .getCart()
+        .then(cart => {
+            return cart.getProducts({WHERE: {id: prodID}});
+
+        })
+        .then(products => {
+            const product = products[0];
+            product.cartItem.destroy();
+        })
+        .then(result => {
+            res.redirect('/cart');
+        })
+        .catch(err => console.log(err))
+   
 };
     
     
