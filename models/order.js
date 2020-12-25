@@ -9,9 +9,7 @@ const Order = sqlz.define('order',{
         autoIncrement : true,
         allowNull : false,
         primaryKey: true
-    },
-    quantity: Sqlz.INTEGER,
-    
+    }
 })
 
 module.exports = Order;

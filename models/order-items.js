@@ -3,7 +3,7 @@ const Sqlz= require('sequelize');
 
 const sqlz = require('../util/db');
 
-const Order = sqlz.define('order',{
+const OrderItem = sqlz.define('OrderItem',{
     id:{
         type : Sqlz.INTEGER,
         autoIncrement : true,
@@ -14,4 +14,4 @@ const Order = sqlz.define('order',{
     
 })
 
-module.exports = Order;
+module.exports = OrderItem;

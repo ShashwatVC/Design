@@ -8,6 +8,8 @@ const sqlz  = require('./util/db');
 const Product = require('./models/product');
 const User = require('./models/user');
 const Cart = require('./models/cart');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-items')
 const CartItem = require('./models/cart-item');
 const app = express();
 //setting up the view wngine
@@ -40,6 +42,9 @@ User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product,{ through: CartItem });
 Product.belongsToMany(Cart,{ through: CartItem });
+OrderItem.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, {through : OrderItem});
 
 sqlz
     //.sync({force:true})

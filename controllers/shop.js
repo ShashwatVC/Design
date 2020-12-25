@@ -1,6 +1,7 @@
-const P = require('../models/product')
-const C = require('../models/cart');
+const P = require('../models/product');
+const  Order = require('../models/order');
 const CartItem = require('../models/cart-item');
+
 
 exports.getIndex = (req,res,next)=>{
     P.findAll()
@@ -151,7 +152,30 @@ exports.postCartDeleteProduct = (req,res,next) =>{
         .catch(err => console.log(err))
    
 };
-    
+
+exports.postOrder= (req,res,next) => {
+    req.user.getCart()
+    .then(cart => {
+        return cart.getProducts();
+    })
+    .then(products => {
+        console.log(products);
+        return req.user.createOrder()
+        .then(order => {
+            return order.addProducts(
+                products.map(product => {
+                    product.orderitem = { quantity: product.cartItem.quantity };
+                    return product;
+                })
+            );
+        })
+        .catch(err => console.log(err));
+    })
+    .then( result => {
+        res.redirect('/orders');     
+    })
+    .catch(err => console.log(err));
+ };
     
 
 
