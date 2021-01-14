@@ -12,7 +12,7 @@ const Order = require('./models/order');
 const OrderItem = require('./models/order-items')
 const CartItem = require('./models/cart-item');
 const app = express();
-//setting up the view wngine
+//setting up the view engine
 app.set('view engine','ejs');
 app.set('views','views');
 //importing the modules for routes

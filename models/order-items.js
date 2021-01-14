@@ -12,6 +12,6 @@ const OrderItem = sqlz.define('OrderItem',{
     },
     quantity: Sqlz.INTEGER,
     
-})
+});
 
 module.exports = OrderItem;
