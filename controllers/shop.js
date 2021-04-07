@@ -1,10 +1,10 @@
 const P = require('../models/product');
-const  Order = require('../models/order');
-const CartItem = require('../models/cart-item');
+//const  Order = require('../models/order');
+//const CartItem = require('../models/cart-item');
 
 
 exports.getIndex = (req,res,next)=>{
-    P.findAll()
+    P.fetchAll()
     .then(products => {
         res.render('shop/index',{
             prods:products,
@@ -21,7 +21,7 @@ exports.getIndex = (req,res,next)=>{
 
 exports.getProducts = (req,res,next)=>{
     //const products = adminData.products; was used when controller wasn't set up...
-       P.findAll()
+       P.fetchAll()
     .then(products => {
         res.render('shop/product-list',{
             prods:products,
@@ -37,11 +37,11 @@ exports.getProducts = (req,res,next)=>{
 
 exports.getProd = (req,res,next)=> {
     const prodID = req.params.id;
-    P.findByPk(prodID)
+    P.findById(prodID)
     .then(product=>{
         res.render('shop/product-detail',{
             product : product,
-            pageTitle:product.title,
+            pageTitle: product.title,
             path:'/Products',
             
         });
