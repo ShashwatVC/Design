@@ -6,6 +6,8 @@ const econtroller = require('./controllers/err');
 
 const mongoConnect = require('./util/db').mongoConnect;
 
+const User = require('./models/user');
+
 const app = express();
 
 //setting up the view engine
@@ -39,17 +41,18 @@ app.use(express.static(path.join(__dirname,'public')));
     app.use((req,res,next) => {
         // console.log("Hii ✌");
 
-        // User.findByPk(1)    
-        //     .then(user => {
-        //         req.user = user;
-        //         //console.log("USER: ",req.user)
-        //         next();
-        //     })
-        //     .catch(err => console.log(err));
+        User.findById('6071bd1b36efc911bcaaef8e')    
+            .then(user => {
+                req.user = user;
+                //console.log("USER: ",req.user)
+                next();
+            })
+            .catch(err => console.log(err));
         next();
     });
 
 mongoConnect(() => {
+    
     app.listen(4000);
 })
 
