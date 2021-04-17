@@ -38,18 +38,18 @@ app.use(express.static(path.join(__dirname,'public')));
 
 
 
-    app.use((req,res,next) => {
-        // console.log("Hii ✌");
+app.use((req,res,next) => {
+    console.log("Hii ✌");
 
-        User.findById('6071bd1b36efc911bcaaef8e')    
-            .then(user => {
-                req.user = user;
-                //console.log("USER: ",req.user)
-                next();
-            })
-            .catch(err => console.log(err));
-        next();
-    });
+    User.findById('6071bd1b36efc911bcaaef8e')    
+        .then(user => {
+            req.user = new User(user.name, user.email, user.cart, user._id);
+            //console.log("USER: ",req.user)
+            next();
+        })
+        .catch(err => console.log(err));
+    
+});
 
 mongoConnect(() => {
     
@@ -60,7 +60,7 @@ mongoConnect(() => {
 app.use('/admin',adminRoutes);
 
 // // setting up middleware to use shopRoutes declared above:
- app.use('/',shopRoutes);
+ app.use(shopRoutes);
 
 //404 route declaration
 app.use(econtroller.pgnotfnd);
