@@ -142,8 +142,9 @@ exports.getCheckout = (req,res,next)=>{
 };
 
 exports.getOrders = (req,res,next)=>{
-    req.user.getOrders({include : ['products']})
-    .then( orders => {
+    req.user
+    .getOrders()
+    .then(orders => {
         //console.log(orders);
         res.render('shop/orders',{
             pageTitle:'Orders',
