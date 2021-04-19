@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 //importing errror controller
 const econtroller = require('./controllers/err');
 
-const mongoConnect = require('./util/db').mongoConnect;
+const mongoose = require('mongoose');
+// const mongoConnect = require('./util/db').mongoConnect;
 
 const User = require('./models/user');
 
@@ -41,9 +42,9 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use((req,res,next) => {
     console.log("Hii ✌");
 
-    User.findById('6071bd1b36efc911bcaaef8e')    
+    User.findById('607dce1bc77b7124b80895b9')    
         .then(user => {
-            req.user = new User(user.user, user.email, user.cart, user._id);
+            req.user = user;
             //console.log("USER: ",req.user)
             next();
         })
@@ -51,10 +52,29 @@ app.use((req,res,next) => {
     
 });
 
-mongoConnect(() => {
+mongoose.connect('mongodb+srv://tester:tester19@cluster0.hg8rf.mongodb.net/shop?retryWrites=true&w=majority')
+.then(result => {
+    User.findOne()
+    .then(user => {
+        if(!user){
+            const user = new User({
+                name: 'Mximoff',
+                email: 'max@test.com',
+                cart: {
+                    items: []
+                }
+            });
+            user.save();
+        }
+    })
     
     app.listen(4000);
 })
+.catch(err => {
+    console.log(err);
+});
+    
+    
 
 // //filtering "/admin" routes to adminData.routes
 app.use('/admin',adminRoutes);

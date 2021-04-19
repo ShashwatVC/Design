@@ -4,8 +4,9 @@ const P = require('../models/product');
 
 
 exports.getIndex = (req,res,next)=>{
-    P.fetchAll()
+    P.find()
     .then(products => {
+        console.log(products);
         res.render('shop/index',{
             prods:products,
             pageTitle:'Shop',
@@ -21,7 +22,7 @@ exports.getIndex = (req,res,next)=>{
 
 exports.getProducts = (req,res,next)=>{
     //const products = adminData.products; was used when controller wasn't set up...
-       P.fetchAll()
+       P.find()
     .then(products => {
         res.render('shop/product-list',{
             prods:products,
@@ -53,12 +54,7 @@ exports.getProd = (req,res,next)=> {
 };
 
 
-// exports.getCart = (req,res,next)=>{
-//     res.render('shop/cart',{
-//         pageTitle:'Cart',
-//         path:'/cart'
-//     });
-// };
+
 
 exports.getCart = (req, res, next) => {
     req.user
@@ -71,24 +67,7 @@ exports.getCart = (req, res, next) => {
             });
         })
         .catch(err => console.log(err));
-//   C.getCart(cart => {
-//     P.fetchAll(products => {
-//       const cartProducts = [];
-//       for (product of products) {
-//         const cartProductData = cart.products.find(
-//           prod => prod.id === product.id
-//         );
-//         if (cartProductData) {
-//           cartProducts.push({ productData: product, qty: cartProductData.qty });
-//         }
-//       }
-//       res.render('shop/cart', {
-//         path: '/cart',
-//         pageTitle: 'Your Cart',
-//         products: cartProducts
-//       });
-//     });
-//   });
+
 };
 
 

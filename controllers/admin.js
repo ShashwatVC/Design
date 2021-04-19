@@ -16,23 +16,21 @@ exports.getAddProduct = (req,res,next)=>{// app.post to filter requests to post 
 
 exports.postAddProduct = (req,res,next)=>{
     const title = req.body.title;
-    const imageurl= req.body.imageurl;
+    const imageUrl= req.body.imageurl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product(
-        title, 
-        price, 
-        description, 
-        imageurl,
-        null,
-        req.user._id
-        );
+    const product = new Product({
+        title: title, 
+        price:price, 
+        imageUrl: imageUrl, 
+        description: description
+    });
         product
         .save()
         .then(result=>{
             //console.log(result);
             console.log('Created');
-            res.redirect('/admin/products');
+            res.redirect('/products');
         })
         .catch(err=>{
             console.log(err);
@@ -84,16 +82,15 @@ exports.postEditProduct = (req,res,next) =>{
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     
-    const product = new P(
-        updatedTitle,
-        updatedPrice,
-        updatedDescription, 
-        updatedImageurl,
-        prodId,
-        req.user._id
-        );
-    product
+    P.findById(prodId).then(product => {
+        product.title = updatedTitle;
+        product.imageUrl = updatedImageurl;
+        product.price = updatedPrice;
+        product.description = updatedDescription;
+        return product
         .save()
+    })
+        
         .then( result => {
             console.log('UPDATED')
             res.redirect('/admin/products');
@@ -108,7 +105,7 @@ exports.postEditProduct = (req,res,next) =>{
 exports.getProducts = (req,res,next)=>{
     //const products = adminData.products; was used when controller wasn't set up...
 
-        P.fetchAll()
+        P.find()
         // req.user
         // .getProducts()
         .then(products=>{
@@ -126,7 +123,7 @@ exports.getProducts = (req,res,next)=>{
 
 exports.postDeleteproduct = (req,res,next)=>{
     const prodId = req.body.id;
-        P.DeleteById(prodId)
+        P.findByIdAndRemove(prodId)
         .then(() => {
             console.log('DELETED');
             res.redirect('/admin/products')
