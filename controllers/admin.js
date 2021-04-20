@@ -23,7 +23,8 @@ exports.postAddProduct = (req,res,next)=>{
         title: title, 
         price:price, 
         imageUrl: imageUrl, 
-        description: description
+        description: description,
+        userId: req.user._id
     });
         product
         .save()
@@ -106,9 +107,12 @@ exports.getProducts = (req,res,next)=>{
     //const products = adminData.products; was used when controller wasn't set up...
 
         P.find()
+        // .select('title price -_id')
+        .populate('userId')
         // req.user
         // .getProducts()
         .then(products=>{
+            // console.log(products);
             res.render('admin/products',{
                 prods:products, 
                 pageTitle:'Admin Products',

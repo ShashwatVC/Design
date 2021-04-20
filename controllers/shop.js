@@ -1,4 +1,7 @@
+// const { RAW } = require('sequelize/types/lib/query-types');
 const P = require('../models/product');
+const Order = require('../models/order');
+const order = require('../models/order');
 //const  Order = require('../models/order');
 //const CartItem = require('../models/cart-item');
 
@@ -58,8 +61,11 @@ exports.getProd = (req,res,next)=> {
 
 exports.getCart = (req, res, next) => {
     req.user
-    .getCart()
-        .then(products => {
+    .populate('cart.items.productId')
+    .execPopulate()
+        .then(user => {
+            console.log(user.cart.items);
+            const products = user.cart.items;
             res.render('shop/cart',{
                 pageTitle:'Cart',
                 path:'/cart',
@@ -93,7 +99,7 @@ exports.postCart = (req,res,next) =>{
 exports.postCartDeleteProduct = (req,res,next) =>{
     const prodId = req.body.productId;
     req.user
-        .deleteItemFromCart(prodId)
+        .removeFromCart(prodId)
         .then(result => {
             res.redirect('/cart');
         })
@@ -102,14 +108,36 @@ exports.postCartDeleteProduct = (req,res,next) =>{
 };
 
 exports.postOrder= (req,res,next) => {
-    let fetchedCart;
     req.user
-        .addOrder()
+    .populate('cart.items.productId')
+    .execPopulate()
+        .then(user => {
+            const products = user.cart.items.map(i=> {
+                return {quantity: i.quantity, product: {...i.productId._doc}};
+            });
+            const order = new Order({
+                user: {
+                    name: req.user.name,
+                    email: req.user.email,
+                    userId: req.user._id
+                },
+                products: products
+            });
+            // console.log(order);
+            return order.save();
+        })
         .then( result => {
-            res.redirect('/orders');     
+            return req.user.clearCart();
+                
+        })
+        .then(() => {
+            res.redirect('/orders'); 
         })
         .catch(err => console.log(err));
  };
+            
+    
+        
     
 
 
@@ -121,8 +149,7 @@ exports.getCheckout = (req,res,next)=>{
 };
 
 exports.getOrders = (req,res,next)=>{
-    req.user
-    .getOrders()
+    Order.find({'user.userId': req.user._id})
     .then(orders => {
         //console.log(orders);
         res.render('shop/orders',{
@@ -131,6 +158,8 @@ exports.getOrders = (req,res,next)=>{
             orders : orders
         });
     })
+    
+    
     .catch(err => console.log(err));
     
 };
