@@ -4,6 +4,7 @@ const path = require('path');
 const { getProducts } = require('../controllers/shop');
 //const rootDir = require('.util/path.js');
 //const adminData = require('./admin');
+const isAuth = require('../midware/is-auth');
 
 const ShopController = require('../controllers/shop')
 
@@ -20,15 +21,15 @@ router.get('/products/:id',ShopController.getProd);
 
 // // router.get('/checkout');
 
-router.get('/cart', ShopController.getCart);
+router.get('/cart', isAuth , ShopController.getCart);
 
-router.post('/cart', ShopController.postCart);
+router.post('/cart', isAuth , ShopController.postCart);
 
-router.post('/cart-delete-item',ShopController.postCartDeleteProduct);
+router.post('/cart-delete-item', isAuth ,ShopController.postCartDeleteProduct);
 
-router.post('/create-order', ShopController.postOrder);
+router.post('/create-order', isAuth , ShopController.postOrder);
 
-router.get('/orders', ShopController.getOrders);
+router.get('/orders', isAuth , ShopController.getOrders);
 
 // router.get('/checkout', ShopController.getCheckout);
 

@@ -4,7 +4,6 @@ const Product = require('../models/product');
 const P = require('../models/product')
 
 
-
 exports.getAddProduct = (req,res,next)=>{// app.post to filter requests to post requests could be done for GET,POST,DELETE,PATCH,UPDATE
     if (!req.session.isLoggedIn){
       return res.redirect('/login')
