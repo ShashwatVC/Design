@@ -13,7 +13,8 @@ exports.getIndex = (req,res,next)=>{
         res.render('shop/index',{
             prods:products,
             pageTitle:'Shop',
-            path:'/',      
+            path:'/',
+            isAuthenticated: req.session.isLoggedIn
         });
     })
     .catch(err=>{
@@ -30,7 +31,8 @@ exports.getProducts = (req,res,next)=>{
         res.render('shop/product-list',{
             prods:products,
             pageTitle:'Products',
-            path:'/Products',      
+            path:'/Products',
+            isAuthenticated: req.session.isLoggedIn      
         });
     })
     .catch(err=>{
@@ -47,6 +49,7 @@ exports.getProd = (req,res,next)=> {
             product : product,
             pageTitle: product.title,
             path:'/Products',
+            isAuthenticated: req.session.isLoggedIn  
             
         });
     })
@@ -55,10 +58,6 @@ exports.getProd = (req,res,next)=> {
     });
     
 };
-
-
-
-
 exports.getCart = (req, res, next) => {
     req.user
     .populate('cart.items.productId')
@@ -69,7 +68,8 @@ exports.getCart = (req, res, next) => {
             res.render('shop/cart',{
                 pageTitle:'Cart',
                 path:'/cart',
-                products: products
+                products: products,
+                isAuthenticated: req.session.isLoggedIn  
             });
         })
         .catch(err => console.log(err));
@@ -82,12 +82,13 @@ exports.postCart = (req,res,next) =>{
 
     P.findById(prodID)
     .then(product => {
-        req.user.addToCart(product);
-        res.redirect('/cart');
+        return req.user.addToCart(product);
 
     })
     .then(result => {
         console.log(result)
+        res.redirect('/cart');
+
     })
     .catch(err => {
         console.log(err);
@@ -155,7 +156,8 @@ exports.getOrders = (req,res,next)=>{
         res.render('shop/orders',{
             pageTitle:'Orders',
             path:'/orders',
-            orders : orders
+            orders : orders,
+            isAuthenticated: req.session.isLoggedIn  
         });
     })
     

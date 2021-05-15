@@ -6,10 +6,14 @@ const P = require('../models/product')
 
 
 exports.getAddProduct = (req,res,next)=>{// app.post to filter requests to post requests could be done for GET,POST,DELETE,PATCH,UPDATE
+    if (!req.session.isLoggedIn){
+      return res.redirect('/login')
+    }
     res.render('admin/edit',{
         pageTitle:'Add Product',
         path:'/admin/add-product',
-        editing:false
+        editing:false,
+        isAuthenticated: req.session.isLoggedIn
     });
 
 };
@@ -55,7 +59,8 @@ exports.getEditProduct = (req,res,next)=>{// app.post to filter requests to post
             pageTitle:'Edit Product',
             path:'/admin/edit-product',
             editing: true,
-            products: product
+            products: product,
+            isAuthenticated: req.session.isLoggedIn
 
         });
          
@@ -72,7 +77,8 @@ exports.getAdminProducts = (req,res,next) =>{
         pageTitle:'Admin Products',
         path:'/admin/products',
         activeShop: true,
-        productCSS: true
+        productCSS: true,
+        isAuthenticated: req.session.isLoggedIn
     });
 };
 
@@ -116,7 +122,8 @@ exports.getProducts = (req,res,next)=>{
             res.render('admin/products',{
                 prods:products, 
                 pageTitle:'Admin Products',
-                path:'/admin/products',   
+                path:'/admin/products',
+                isAuthenticated: req.session.isLoggedIn
              });
         })
         .catch(err=>{
