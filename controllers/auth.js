@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
+const user = require('../models/user');
 const User = require('../models/user');
+const { get } = require('../routes/admin');
 
 exports.getLogin = (req,res,next)=>{
     
@@ -73,19 +75,21 @@ exports.getSignup = (req,res,next)=> {
 }
 
 exports.postSignup = (req,res,next)=> {
+    const usrNm = req.body.userName;
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
-    User.findOne({email:email})
+    User.findOne({email:email,usrNm:usrNm})
     .then(UserDoc => {
         if(UserDoc){
-            req.flash('err','Email already exist.');
+            req.flash('err','User Already Exists!!');
             return res.redirect('/signup');
         }
         return bcrypt
         .hash(password, 12)
         .then(hashedPassword => {
             const user = new User({
+                userName: usrNm,
                 email: email,
                 password: hashedPassword,
                 cart: { item: [] }
@@ -99,4 +103,64 @@ exports.postSignup = (req,res,next)=> {
     .catch(err => {
         console.log(err);
     })
+}
+
+exports.getReset = (req,res,next)=> {
+    let message = req.flash('err');
+        if(message.length > 0){
+            message = message[0];
+        }
+        else{
+            message = null;
+        }
+    res.render('auth/reset', {
+        path: '/reset',
+        pageTitle: 'Reset',
+        errorMessage: message
+      });
+}
+
+exports.postReset = (req,res,next)=>{
+    const email = req.body.email;
+    const masterKey = req.body.masterKey;
+    const newPwd = req.body.newPassword;
+    User.findOne({email:email})
+    .then(usrDoc=> {
+        if (usrDoc){ 
+            console.log(masterKey.toString());
+            if(masterKey.toString() === usrDoc.userName.toString()){
+                return bcrypt.hash(newPwd, 12)
+                .then(hashPwd =>{
+                    password = hashPwd;
+                    User.findById(user._id)
+                    .then(user =>{
+                        usrDoc.password = hashPwd;
+                        return usrDoc.save();
+                    })
+                    .then(result => {
+                        res.redirect('/login');
+                    })
+                })
+                .catch(err=> {
+                    console.log(err);
+                })
+            }
+            else{
+                req.flash('err',"Wrong MasterKey!!!");
+                return res.redirect('/reset') 
+            }
+        }
+        else {
+            req.flash('err',"User Doesn't Exist!!!");
+            return res.redirect('/reset')
+
+        }
+    })
+    
+        
+    
+    
+    
+
+
 }
