@@ -16,7 +16,12 @@
                                 <% order.products.forEach(p => { %>
                                     <li class="orders__products-item"><%= p.product.title %></li>
                                     <li class="orders__products-item">Quantity: <%= p.quantity %></li>
-                                    <li class="orders__products-item">Total Price: $<%= p.price%></li>
+                                    <li class="orders__products-item">Total Price: $<%= p.price%></li>    
+                                    <form action="/delete-order" method="POST">
+                                        <input type="hidden" value="<%=order._id%>" name="id">
+                                        <button class="btn" type="submit">Cancel The Order</button>
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">    
+                                    </form>
                                 <% }); %>
                             </ul>
                         </li>

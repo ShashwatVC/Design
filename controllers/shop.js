@@ -164,3 +164,14 @@ exports.getOrders = (req,res,next)=>{
     .catch(err => console.log(err));
     
 };
+
+exports.postDeleteOrder = (req,res, next) => {
+    const prodId = req.body.id;
+
+    Order.findByIdAndRemove(prodId)
+        .then(() => {
+            console.log('DELETED');
+            res.redirect('/orders')
+        })
+        .catch(err=>console.log(err));
+}
