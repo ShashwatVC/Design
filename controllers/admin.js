@@ -141,4 +141,12 @@ exports.postDeleteproduct = (req,res,next)=>{
         })
         .catch(err=>console.log(err));
     
+};
+
+exports.getProfile = (req,res,next) =>{
+    res.render('admin/profile.ejs',{
+        pageTitle:'Profile',
+        path:'/admin/profile',
+        isAuthenticated: req.session.isLoggedIn
+    });
 }

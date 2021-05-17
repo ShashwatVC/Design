@@ -61,7 +61,7 @@ exports.getCart = (req, res, next) => {
     .populate('cart.items.productId')
     .execPopulate()
         .then(user => {
-            console.log(user.cart.items);
+            // console.log(user.cart.items);
             const products = user.cart.items;
             res.render('shop/cart',{
                 pageTitle:'Cart',
@@ -111,7 +111,8 @@ exports.postOrder= (req,res,next) => {
     .execPopulate()
         .then(user => {
             const products = user.cart.items.map(i=> {
-                return {quantity: i.quantity, product: {...i.productId._doc}};
+                const totalPrice = i.price * i.quantity;
+                return {quantity: i.quantity, product: {...i.productId._doc},price: totalPrice};
             });
             const order = new Order({
                 user: {
@@ -146,14 +147,17 @@ exports.getCheckout = (req,res,next)=>{
 };
 
 exports.getOrders = (req,res,next)=>{
+    // const products = user.cart.items;
+
     Order.find({'user.userId': req.user._id})
     .then(orders => {
-        //console.log(orders);
-        res.render('shop/orders',{
-            pageTitle:'Orders',
-            path:'/orders',
-            orders : orders,
-        });
+                //console.log(orders);
+                res.render('shop/orders',{
+                    pageTitle:'Orders',
+                    path:'/orders',
+                    orders : orders,
+                    
+             });
     })
     
     

@@ -36,10 +36,11 @@
                     </li>
                 <% } else { %>
                         <li class="main-header__item">
-                        <form action="/logout" method="post">
-                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                            <button type="submit">Logout</button>
-                        </form>
+                            <form action="/logout" method="post">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button type="submit">Logout</button>
+                            </form>
+                            <a class="<%= path === '/profile' ? 'active' : '' %>" href="/profile">Profile</a>
                         </li>
                 <% } %>        
             </ul>   
