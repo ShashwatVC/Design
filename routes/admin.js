@@ -20,6 +20,8 @@ router.get ('/edit-product/:id', isAuth ,admincontroller.getEditProduct)
 
 router.get ('/edit-profile/:id', isAuth ,admincontroller.getEditProfile)
 
+router.post ('/update-profile/', isAuth ,admincontroller.postEditProfile)
+
 router.post ('/edit-product/',admincontroller.postEditProduct);
 
 router.post ('/delete-product',admincontroller.postDeleteproduct);

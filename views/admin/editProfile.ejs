@@ -11,7 +11,7 @@
                     <div class="grid">
                         
                             <article class="card product-item">
-                                <form class="login-form" action="/update" method="POST">
+                                <form class="login-form" action="/admin/update-profile" method="POST">
                                     <div class="card_user__image">
                                         <img src="/<%=user.imageUrl %>" >
                                     </div>
@@ -27,8 +27,8 @@
                                 
                                 </div>
                                 <div class="form-control">
-                                    <label for="email">User Name</label>
-                                    <input type="Text" name="userName" id="userName" value="<%=user.userName%>">
+                                    <label for="email">Name</label>
+                                    <input type="Text" name="userName" id="userName" value="<%=user.name%>">
                                 </div>
                                 <div class="form-control">
                                     <label for="age">Age</label>
