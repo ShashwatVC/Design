@@ -5,6 +5,7 @@ const { get } = require('../routes/admin');
 
 exports.getLogin = (req,res,next)=>{
     
+    
     let message = req.flash('err');
         if(message.length > 0){
             message = message[0];
@@ -12,10 +13,12 @@ exports.getLogin = (req,res,next)=>{
         else{
             message = null;
         }
+        
     res.render('auth/login',{
         pageTitle:'Login',
         path:'/login',
-        errorMessage: message
+        errorMessage: message,
+        // isSu: 'superuser'
     });
 };
 
@@ -28,10 +31,14 @@ exports.postLogin = (req,res,next)=>{
             req.flash('err','Invalid Email or Password.');
             return res.redirect('/login');
         }
+        console.log(user);
+
         bcrypt.compare(password, user.password)
             .then(result => {
                 if(result){
                     req.session.isLoggedIn = true;
+                    // req.session.isSu = req.session.user.role;
+                    // req.session.role = User.role;
                     req.session.user = user;
                     return req.session.save(err => {
                         console.log(err);
@@ -79,18 +86,33 @@ exports.postSignup = (req,res,next)=> {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
+    const image = req.file;
+    const age = req.body.age;
+    const name = req.body.name;
+    const country = req.body.country;
+    const category = req.body.category;
+    // console.log(image);
+    console.log(age);
     User.findOne({email:email,usrNm:usrNm})
     .then(UserDoc => {
         if(UserDoc){
             req.flash('err','User Already Exists!!');
             return res.redirect('/signup');
         }
+
+        const imageUrl = image.path;
+        console.log(imageUrl);
         return bcrypt
         .hash(password, 12)
         .then(hashedPassword => {
             const user = new User({
                 userName: usrNm,
+                name: name,
+                age: age,
+                country: country,
+                category: category,
                 email: email,
+                imageUrl: imageUrl,
                 password: hashedPassword,
                 cart: { item: [] }
             });

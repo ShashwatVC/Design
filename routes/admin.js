@@ -4,6 +4,8 @@ const path = require('path');
 
 const admincontroller = require('../controllers/admin');
 const isAuth = require('../midware/is-auth');
+const isAuthz = require('../midware/is-authz');
+
 
 const router = express.Router();
 
@@ -16,11 +18,17 @@ router.post ('/add-product', admincontroller.postAddProduct);
 
 router.get ('/edit-product/:id', isAuth ,admincontroller.getEditProduct)
 
+router.get ('/edit-profile/:id', isAuth ,admincontroller.getEditProfile)
+
 router.post ('/edit-product/',admincontroller.postEditProduct);
 
 router.post ('/delete-product',admincontroller.postDeleteproduct);
 
-router.get ('/profile',admincontroller.getProfile);
+router.get ('/profile',admincontroller.getUsers);
+
+// router.get ('/users', isAuthz, admincontroller.getUsers);
+
+
 
 
 

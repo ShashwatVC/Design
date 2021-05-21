@@ -1,0 +1,58 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    </head>
+
+    <body>
+        <%- include('../includes/nav.ejs') %>
+
+            <main>
+                    <div class="grid">
+                        
+                            <article class="card product-item">
+                                <form class="login-form" action="/update" method="POST">
+                                    <div class="card_user__image">
+                                        <img src="/<%=user.imageUrl %>" >
+                                    </div>
+                                <div class="form-control">
+                                    <label for="Image">Profile-Pic</label>
+                                    <input 
+                                    class="btn"
+                                    type="file" 
+                                    name="image" 
+                                    id="image"
+                                    
+                                    >
+                                
+                                </div>
+                                <div class="form-control">
+                                    <label for="email">User Name</label>
+                                    <input type="Text" name="userName" id="userName" value="<%=user.userName%>">
+                                </div>
+                                <div class="form-control">
+                                    <label for="age">Age</label>
+                                    <input type="number" name="age" id="age" value="<%=user.age%>">
+                                </div>
+                                <div class="form-control">
+                                    <label for="country">Country</label>
+                                    <input type="Text" name="country" id="country" value="<%=user.country%>">
+                                </div>
+                                <div class="form-control">
+                                    <label for="category">I sell</label>
+                                    <input type="category" name="category" id="category" value="<%=user.category%>">
+                                </div>
+                                <div class="form-control">
+                                    <label for="email">E-Mail</label>
+                                    <input type="email" name="email" id="email" value="<%=user.email%>">
+                                </div>
+                                <div class="card__actions">
+                                    <button class="btn" type="submit">Update</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </div>
+                                </form>
+                            </article>
+                            
+                    </div>
+            </main>
+            <%- include('../includes/end.ejs') %>

@@ -1,6 +1,8 @@
 //const Product = require('../models/product');
 
 const Product = require('../models/product');
+const user = require('../models/user');
+
 const P = require('../models/product')
 
 
@@ -12,7 +14,8 @@ exports.getAddProduct = (req,res,next)=>{// app.post to filter requests to post 
         pageTitle:'Add Product',
         path:'/admin/add-product',
         editing:false,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        
     });
 
 };
@@ -59,7 +62,9 @@ exports.getEditProduct = (req,res,next)=>{// app.post to filter requests to post
             path:'/admin/edit-product',
             editing: true,
             products: product,
-            isAuthenticated: req.session.isLoggedIn
+            isAuthenticated: req.session.isLoggedIn,
+            isSu: req.session.user.role
+
 
         });
          
@@ -75,9 +80,11 @@ exports.getAdminProducts = (req,res,next) =>{
     res.render('admin/products.ejs',{
         pageTitle:'Admin Products',
         path:'/admin/products',
-        activeShop: true,
-        productCSS: true,
-        isAuthenticated: req.session.isLoggedIn
+        // activeShop: true,
+        // productCSS: true,
+        isAuthenticated: req.session.isLoggedIn,
+        
+
     });
 };
 
@@ -123,7 +130,9 @@ exports.getProducts = (req,res,next)=>{
                 prods:products, 
                 pageTitle:'Admin Products',
                 path:'/admin/products',
-                isAuthenticated: req.session.isLoggedIn
+                isAuthenticated: req.session.isLoggedIn,
+                isSu: req.session.user.role
+
              });
         })
         .catch(err=>{
@@ -143,10 +152,34 @@ exports.postDeleteproduct = (req,res,next)=>{
     
 };
 
-exports.getProfile = (req,res,next) =>{
-    res.render('admin/profile.ejs',{
-        pageTitle:'Profile',
-        path:'/admin/profile',
-        isAuthenticated: req.session.isLoggedIn
+exports.getEditProfile = (req,res,next) =>{
+    const uID = req.session.user._id;
+    user.findById(uID)
+    .then(user=>{
+        res.render('admin/editProfile.ejs',{
+            pageTitle:'Edit Profile',
+            path:'/admin/editProfile',
+            isAuthenticated: req.session.isLoggedIn,
+            user: user
+        });
     });
+}
+
+exports.getUsers = (req,res,next) =>{
+    const uid = req.session.user._id;
+    
+    // console.log(uid);
+    user.findById(uid)
+    .then(user=>{
+        // console.log(user);
+        res.render('admin/profile.ejs',{
+            user : user,
+            pageTitle: user.userName,
+            path:'/admin/Profile',
+            isAuthenticated: req.session.isLoggedIn,
+
+        });
+    })
+
+    
 }

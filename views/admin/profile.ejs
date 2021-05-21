@@ -1,45 +1,47 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/profile.css">
     </head>
 
     <body>
         <%- include('../includes/nav.ejs') %>
 
             <main>
-                <% if (prods.length > 0) { %>
                     <div class="grid">
-                        <% for (let product of prods) { %>
+                        
                             <article class="card product-item">
-                                <header class="card__header">
-                                    <h1 class="product__title">
-                                        <%= product.title %>
-                                    </h1>
-                                </header>
-                                <div class="card__image">
-                                    <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                               
+                                <div class="card_user__image">
+                                    <img src="/<%=user.imageUrl %>" >
+                                </div> 
+                                <div>
+                                <h2 class="product__title"><%= user.name %></h2>
                                 </div>
+                                </header>   
                                 <div class="card__content">
-                                    <h2 class="product__price">$
-                                        <%= product.price %>
-                                    </h2>
-                                    <p class="product__description">
-                                        <%= product.description %>
+                                    <p class="product__description"> 
+                                        User Name:  <%= user.userName %>
                                     </p>
+                                    <p class="product__description"> 
+                                        Age:  <%= user.age %>
+                                    </p>
+                                    <p class="product__description"> 
+                                        Country:  <%= user.country %>
+                                    </p>
+                                    <p class="product__description"> 
+                                        I Sell:  <%= user.category %>
+                                    </p>
+                                    <p class="product__description"> 
+                                        Email : <%= user.email %>
+                                    </p>
+                                    <div class="card__options">
+                                        <a href="/admin/edit-profile/<%=user._id%>?edit=true" class="btn">Edit</a>
+                                        
+    
+                                    </div>
                                 </div>
-                                <div class="card__actions">
-                                    <a href="/admin/edit-product/<%=product._id%>?edit=true" class="btn">Edit</a>
-                                    <form action="/admin/delete-product" method="POST">
-                                        <input type="hidden" value="<%=product._id%>" name="id">
-                                        <button class="btn" type="submit">Delete</button>
-                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                    </form>
-
-                                </div>
+                                
                             </article>
-                            <% } %>
+                            
                     </div>
-                    <% } else { %>
-                        <h1>No Products Found!</h1>
-                        <% } %>
             </main>
             <%- include('../includes/end.ejs') %>

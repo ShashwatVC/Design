@@ -1,6 +1,8 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/forms.css">
     <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/profile.css">
+
 </head>
 
 <body>
@@ -10,25 +12,58 @@
         <% if(errorMessage){ %>
             <div class="user-message user-message--error" ><%= errorMessage %></div>
         <% } %>
-        <form class="login-form" action="/signup" method="POST">
-            <div class="form-control">
-                <label for="email">User Name</label>
-                <input type="Text" name="userName" id="userName">
-            </div>
-            <div class="form-control">
-                <label for="email">E-Mail</label>
-                <input type="email" name="email" id="email">
-            </div>
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password">
-            </div>
-            <div class="form-control">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" name="confirmPassword" id="confirmPassword">
-            </div>
-            <button class="btn" type="submit">Sign-Up</button>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        </form>
+        <div class="grid">
+            <article class="card product-item">
+                <form class="login-form" action="/signup" method="POST" enctype="multipart/form-data">
+                    
+                    <div class="form-control">
+                        <label for="userName">User Name</label>
+                        <input type="Text" name="userName" id="userName">
+                    </div>
+                    <div class="form-control">
+                        <label for="Image">Profile-Pic</label>
+                        <input 
+                        class="btn"
+                        type="file" 
+                        name="image" 
+                        id="image">
+                    </div>
+                    
+                    <div class="form-control">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" id="name">
+                    </div>
+                    <div class="form-control">
+                        <label for="age">Age</label>
+                        <input type="number" name="age" id="age">
+                    </div>
+                    <div class="form-control">
+                        <label for="country">country</label>
+                        <input type="text" name="country" id="country">
+                    </div>
+                    <div class="form-control">
+                        <label for="category">I sell </label>
+                        <input type="text" name="category" id="category">
+                    </div>
+                    <div class="form-control">
+                        <label for="email">E-Mail</label>
+                        <input type="email" name="email" id="email">
+                    </div>
+                    <div class="form-control">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password">
+                    </div>
+                    <div class="form-control">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" name="confirmPassword" id="confirmPassword">
+                    </div>
+                    <div class="card__actions">
+                        <button class="btn" type="submit">Sign-Up</button>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    </div>
+                </form>
+        </article>
+        
+        </div>
     </main>
 <%- include('../includes/end.ejs') %>
