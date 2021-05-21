@@ -105,13 +105,13 @@ exports.postEditProduct = (req,res,next) =>{
         .save()
     })
         
-        .then( result => {
-            console.log('UPDATED')
-            res.redirect('/admin/products');
-        })
-        .catch(err=>{
-            console.log(err);
-        });
+    .then( result => {
+        console.log('UPDATED')
+        res.redirect('/admin/products');
+    })
+    .catch(err=>{
+        console.log(err);
+    });
     
 
 }
@@ -163,6 +163,49 @@ exports.getEditProfile = (req,res,next) =>{
             user: user
         });
     });
+}
+exports.postEditProfile = (req,res,next) =>{
+    const image = req.file;
+    const updatedName = req.body.userName;
+    const updatedAge = req.body.age;
+    const updatedCountry = req.body.country;
+    const updatedCategory = req.body.category;
+    const updatedEmail = req.body.email;
+    const uID = req.session.user._id;
+    if(!image){
+        user.findById(uID)
+        .then(user=>{   
+        user.imageUrl = user.imageUrl;
+        user.name = updatedName;
+        user.age = updatedAge;
+        user.country = updatedCountry;
+        user.category = updatedCategory;
+        user.email = updatedEmail;
+        return user.save();
+        })
+        .then(result => {
+            res.redirect('/admin/profile');    
+            // isAuthenticated: req.session.isLoggedIn;
+        })
+    }  
+    else{
+        const updatedImageUrl = image.path
+        user.findById(uID)
+        .then(user=>{   
+        user.imageUrl = updatedImageUrl;
+        user.name = updatedName;
+        user.age = updatedAge;
+        user.country = updatedCountry;
+        user.category = updatedCategory;
+        user.email = updatedEmail;
+        return user.save();
+        })
+        .then(result => {
+            res.redirect('/admin/profile');    
+            // isAuthenticated: req.session.isLoggedIn;
+        })
+    }
+        
 }
 
 exports.getUsers = (req,res,next) =>{
