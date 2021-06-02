@@ -19,7 +19,7 @@ const store = new MongoDBStore({
 });
 
 const csrfProtec = csrf();
-//setting up the view engine
+//setting up the view engine...
 
 app.set('view engine','ejs');
 app.set('views','views');
